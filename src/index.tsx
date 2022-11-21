@@ -2,7 +2,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import Router from "./router";
+import Router from "./routers";
 import reportWebVitals from "./reportWebVitals";
 
 import "@toast-ui/calendar/dist/toastui-calendar.min.css";

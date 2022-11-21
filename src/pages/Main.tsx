@@ -1,9 +1,7 @@
+import TuiCalendar from "@toast-ui/react-calendar";
+
 function Main() {
-  return (
-    <div>
-      <p>test</p>
-    </div>
-  );
+  return <TuiCalendar />;
 }
 
 export default Main;
