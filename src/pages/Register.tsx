@@ -30,7 +30,7 @@ function Register() {
       justify='center'
       css={{ maxW: 480, minHeight: '100vh' }}
     >
-      <Grid.Container gap={1.5} direction='column'>
+      <Grid.Container gap={2.5} direction='column'>
         <Grid style={{ marginBottom: 20 }}>
           <Image src={Logo} width={180} />
         </Grid>
@@ -39,6 +39,7 @@ function Register() {
             type={'email'}
             color='primary'
             status={form.email.error ? 'error' : 'default'}
+            helperText={form.email.error ? '이메일 형식이 올바르지 않습니다.' : ''}
             contentLeft={<Message />}
             name={'email'}
             value={form.email.value}
@@ -62,6 +63,11 @@ function Register() {
           <Input.Password
             color='primary'
             status={form.password.error ? 'error' : 'default'}
+            helperText={
+              form.password.error
+                ? '비밀번호가 8자리 미만이거나 재입력 패스워드가 일치하지 않습니다.'
+                : ''
+            }
             contentLeft={<Lock />}
             value={form.password.value}
             name={'password'}
@@ -75,6 +81,7 @@ function Register() {
           <Input
             color='primary'
             status={form.name.error ? 'error' : 'default'}
+            helperText={form.name.error ? '이름은 2자리 이상이어야 합니다.' : ''}
             contentLeft={<User />}
             value={form.name.value}
             name={'name'}
@@ -89,6 +96,7 @@ function Register() {
             type='date'
             color='primary'
             status={form.birth.error ? 'error' : 'default'}
+            helperText={form.birth.error ? '생년월일을 올바르게 입력해주세요.' : ''}
             contentLeft={<Calendar />}
             value={form.birth.value}
             name={'birth'}
