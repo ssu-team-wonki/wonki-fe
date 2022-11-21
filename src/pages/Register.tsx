@@ -1,9 +1,8 @@
 import { Container, Grid, Input, Button, Image, Link } from '@nextui-org/react';
-import { User } from 'react-iconly';
 
 import Logo from '../assets/images/logo.png';
 
-function Login() {
+function Register() {
   return (
     <Container
       xs
@@ -14,10 +13,10 @@ function Login() {
     >
       <Grid.Container gap={1.5} direction='column'>
         <Grid style={{ marginBottom: 20 }}>
-          <Image src={Logo} width={180} />
+          <Image draggable={false} src={Logo} width={180} />
         </Grid>
         <Grid>
-          <Input color='primary' bordered fullWidth placeholder='이메일' contentLeft={<User />} />
+          <Input color='primary' bordered fullWidth placeholder='Email' />
         </Grid>
         <Grid>
           <Input.Password color='primary' bordered fullWidth placeholder='비밀번호' />
@@ -26,8 +25,8 @@ function Login() {
           <Button css={{ width: '100%' }}>로그인</Button>
         </Grid>
         <Grid>
-          <Link css={{ margin: '0 auto' }} href='/register'>
-            아직 회원이 아니신가요?
+          <Link css={{ margin: '0 auto' }} href='/login'>
+            이미 계정이 있으신가요?
           </Link>
         </Grid>
       </Grid.Container>
@@ -35,4 +34,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

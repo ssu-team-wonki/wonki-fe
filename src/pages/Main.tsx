@@ -1,4 +1,4 @@
-import TuiCalendar from "@toast-ui/react-calendar";
+import TuiCalendar from '@toast-ui/react-calendar';
 
 function Main() {
   return <TuiCalendar />;

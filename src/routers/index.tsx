@@ -1,15 +1,17 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
-import Main from "../pages/Main";
-import Login from "../pages/Login";
-import { AuthProvider, ProtectedRoute } from "./AuthRouter";
+import Main from '../pages/Main';
+import Register from '../pages/Register';
+import Login from '../pages/Login';
+
+import { AuthProvider, ProtectedRoute } from './AuthRouter';
 
 function Router() {
   return (
     <BrowserRouter>
       <Routes>
         <Route
-          path="/"
+          path='/'
           element={
             <ProtectedRoute>
               <AuthProvider>
@@ -18,8 +20,9 @@ function Router() {
             </ProtectedRoute>
           }
         />
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<Login />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='*' element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
