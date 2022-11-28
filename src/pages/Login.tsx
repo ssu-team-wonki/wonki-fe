@@ -1,14 +1,34 @@
 import { Container, Grid, Input, Button, Image, Link } from '@nextui-org/react';
 import { useState } from 'react';
 import { Message, Lock } from 'react-iconly';
+import { useNavigate } from 'react-router-dom';
+
+import { useAuth } from '../Providers/AuthProvider';
 
 import Logo from '../assets/images/logo.png';
 
 function Login() {
+  const { setProfile } = useAuth();
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     email: '',
     password: '',
   });
+
+  const handleLogin = () => {
+    setProfile({
+      id: 1,
+      username: 'johndoe',
+      profile_image: 'https://i.pravatar.cc/150?img=1',
+      email: form.email,
+      birth_dt: '1990-01-01',
+      created_at: '2021-01-01',
+      number: '123456789',
+    });
+
+    navigate('/');
+  };
 
   return (
     <Container
@@ -43,7 +63,9 @@ function Login() {
           />
         </Grid>
         <Grid>
-          <Button css={{ width: '100%' }}>로그인</Button>
+          <Button css={{ width: '100%' }} onClick={handleLogin}>
+            로그인
+          </Button>
         </Grid>
         <Grid>
           <Link css={{ margin: '0 auto' }} href='/register'>

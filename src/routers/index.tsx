@@ -4,7 +4,7 @@ import Main from '../pages/Main';
 import Register from '../pages/Register';
 import Login from '../pages/Login';
 
-import { AuthProvider, ProtectedRoute } from './AuthRouter';
+import { ProtectedAuthRoute } from './AuthRouter';
 
 function Router() {
   return (
@@ -13,11 +13,9 @@ function Router() {
         <Route
           path='/'
           element={
-            <ProtectedRoute>
-              <AuthProvider>
-                <Main />
-              </AuthProvider>
-            </ProtectedRoute>
+            <ProtectedAuthRoute>
+              <Main />
+            </ProtectedAuthRoute>
           }
         />
         <Route path='/login' element={<Login />} />
