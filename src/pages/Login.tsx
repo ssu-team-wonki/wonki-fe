@@ -25,6 +25,7 @@ function Login() {
       birth_dt: '1990-01-01',
       created_at: '2021-01-01',
       number: '123456789',
+      updated_at: '2021-01-01',
     });
 
     navigate('/');

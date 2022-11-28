@@ -1,0 +1,5 @@
+.toastui-calendar-grid-cell-date
+	.toastui-calendar-weekday-grid-date.toastui-calendar-weekday-grid-date-decorator {
+	color: #fff;
+	background-color: var(--nextui-colors-primary);
+}

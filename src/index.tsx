@@ -3,10 +3,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import Router from './routers';
+import { AuthProvider } from './Providers/AuthProvider';
 import reportWebVitals from './reportWebVitals';
 
-import '@toast-ui/calendar/dist/toastui-calendar.min.css';
-import { AuthProvider } from './Providers/AuthProvider';
+import './styles/common.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
