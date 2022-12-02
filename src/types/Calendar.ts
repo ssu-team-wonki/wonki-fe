@@ -1,26 +1,37 @@
 import type { Options, EventObject } from '@toast-ui/calendar';
 import { User } from './User';
 
-export type Schedule = Omit<EventObject, 'raw'> & {
-  raw: SchedulePayload;
+export type CalendarSchedule = Omit<EventObject, 'raw'> & {
+  raw: Schedule;
 };
 
-export interface SchedulePayload {
+export interface Schedule {
   id: number;
-  user_id: number;
+  userId: number;
   title: string;
   contents: string;
-  start_at: string;
-  end_at: string;
-  owner_id: number;
-  created_at: string;
+  isAllDay: 'Y' | 'N';
+  startDt: string;
+  endDt: string;
+  ownerId: number;
   users: User[];
-  updated_at: string;
+  accept: 'Y' | 'N';
+  createdAt: string;
+}
+
+export interface SchedulePayload {
+  id?: number;
+  title: string;
+  contents: string;
+  isAllDay: 'Y' | 'N';
+  startDt: string;
+  endDt: string;
+  users: User[];
 }
 
 export interface CalendarProps {
   height: string;
   calendars: Options['calendars'];
-  schedules: Schedule[];
-  onScheduleClick: (schedule: Schedule) => void;
+  schedules: CalendarSchedule[];
+  onScheduleClick: (schedule: CalendarSchedule) => void;
 }

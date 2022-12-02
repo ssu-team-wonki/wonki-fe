@@ -1,3 +1,7 @@
-body {
-	/* overflow: scroll hidden; */
+.toastui-calendar-see-more-container {
+	position: fixed !important;
+	top: 50% !important;
+	left: 50% !important;
+	height: 50vh !important;
+	transform: translate(-50%, -50%);
 }

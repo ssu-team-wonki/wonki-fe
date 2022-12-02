@@ -3,12 +3,14 @@ import { useState } from 'react';
 import { Message, Lock } from 'react-iconly';
 import { useNavigate } from 'react-router-dom';
 
-import { useAuth } from '../Providers/AuthProvider';
+import { useAuth } from '../providers/AuthProvider';
 
 import Logo from '../assets/images/logo.png';
+import { toast } from 'react-toastify';
+import { fetchLogin, getLoginUserInfo } from '../services/user';
 
 function Login() {
-  const { setProfile } = useAuth();
+  const { saveToken, setProfile } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -16,19 +18,21 @@ function Login() {
     password: '',
   });
 
-  const handleLogin = () => {
-    setProfile({
-      id: 1,
-      username: 'johndoe',
-      profile_image: 'https://i.pravatar.cc/150?img=1',
-      email: form.email,
-      birth_dt: '1990-01-01',
-      created_at: '2021-01-01',
-      number: '123456789',
-      updated_at: '2021-01-01',
-    });
-
-    navigate('/');
+  const handleLogin = async () => {
+    try {
+      const { token } = await fetchLogin(form);
+      if (token) {
+        const response = await getLoginUserInfo(token);
+        setProfile({ ...response, email: form.email });
+        saveToken(token);
+        navigate('/');
+      } else {
+        toast.error('로그인 정보를 찾을 수 없습니다.');
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error('일시적인 오류입니다. 나중에 다시 시도해주세요.');
+    }
   };
 
   return (

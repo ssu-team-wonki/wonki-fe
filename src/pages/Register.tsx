@@ -2,25 +2,50 @@ import { Container, Grid, Input, Button, Image, Link } from '@nextui-org/react';
 import dayjs from 'dayjs';
 import { useRef } from 'react';
 import { Message, Lock, User, Calendar } from 'react-iconly';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import Logo from '../assets/images/logo.png';
 import { useInputs } from '../hooks/useInputs';
+import { fetchRegister } from '../services/user';
 import { checkEmailRegex } from '../utils/regex';
 
 function Register() {
   const today = useRef(dayjs().format('YYYY-MM-DD'));
   const passwordRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   const [form, onChange] = useInputs({
     email: { value: '', error: false, validator: checkEmailRegex },
     password: {
       value: '',
       error: false,
-      validator: value => value.length > 8 && value === passwordRef.current?.value,
+      validator: value => value.length > 3 && value === passwordRef.current?.value,
     },
-    name: { value: '', error: false, validator: value => value.length >= 2 },
+    username: { value: '', error: false, validator: value => value.length >= 2 },
     birth: { value: '', error: false, validator: value => dayjs(value).isBefore(today.current) },
   });
+
+  const handleRegister = () => {
+    fetchRegister({
+      username: form.username.value,
+      email: form.email.value,
+      password: form.password.value,
+      birthDt: dayjs(form.birth.value).format('YYYY-MM-DD'),
+    })
+      .then(response => {
+        if (response) {
+          toast.success('회원가입이 완료되었습니다.');
+          navigate('/login');
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        toast.error('일시적인 오류입니다. 나중에 다시 시도해주세요.', {
+          type: 'error',
+        });
+      });
+  };
 
   return (
     <Container
@@ -65,7 +90,7 @@ function Register() {
             status={form.password.error ? 'error' : 'default'}
             helperText={
               form.password.error
-                ? '비밀번호가 8자리 미만이거나 재입력 패스워드가 일치하지 않습니다.'
+                ? '비밀번호가 4자리 미만이거나 재입력 패스워드가 일치하지 않습니다.'
                 : ''
             }
             contentLeft={<Lock />}
@@ -80,11 +105,11 @@ function Register() {
         <Grid>
           <Input
             color='primary'
-            status={form.name.error ? 'error' : 'default'}
-            helperText={form.name.error ? '이름은 2자리 이상이어야 합니다.' : ''}
+            status={form.username.error ? 'error' : 'default'}
+            helperText={form.username.error ? '이름은 2자리 이상이어야 합니다.' : ''}
             contentLeft={<User />}
-            value={form.name.value}
-            name={'name'}
+            value={form.username.value}
+            name={'username'}
             onChange={onChange}
             bordered
             fullWidth
@@ -98,7 +123,6 @@ function Register() {
             status={form.birth.error ? 'error' : 'default'}
             helperText={form.birth.error ? '생년월일을 올바르게 입력해주세요.' : ''}
             contentLeft={<Calendar />}
-            value={form.birth.value}
             name={'birth'}
             onChange={onChange}
             bordered
@@ -108,7 +132,9 @@ function Register() {
           />
         </Grid>
         <Grid>
-          <Button css={{ width: '100%' }}>회원가입</Button>
+          <Button css={{ width: '100%' }} onClick={handleRegister}>
+            회원가입
+          </Button>
         </Grid>
         <Grid>
           <Link css={{ margin: '0 auto' }} href='/login'>

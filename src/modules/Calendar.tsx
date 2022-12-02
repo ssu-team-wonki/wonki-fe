@@ -2,7 +2,7 @@ import type { Options } from '@toast-ui/calendar';
 import TuiCalendar from '@toast-ui/react-calendar';
 import { forwardRef } from 'react';
 
-import { CalendarProps, Schedule } from '../types/Calendar';
+import { CalendarProps, CalendarSchedule } from '../types/Calendar';
 
 import '@toast-ui/calendar/dist/toastui-calendar.min.css';
 import '../styles/calendar.css';
@@ -91,12 +91,16 @@ export const Calendar = forwardRef<TuiCalendar, CalendarProps>(function Calendar
       useFormPopup={false}
       template={templates}
       theme={theme}
-      onClickSchedule={({ schedule }) => onScheduleClick(schedule as Schedule)}
+      onClickEvent={({ event }) => {
+        console.log(event);
+        onScheduleClick(event as CalendarSchedule);
+      }}
       week={{
         dayNames: ['일', '월', '화', '수', '목', '금', '토'],
       }}
       month={{
         visibleEventCount: 3,
+        visibleWeeksCount: 5,
         dayNames: ['일', '월', '화', '수', '목', '금', '토'],
       }}
     />

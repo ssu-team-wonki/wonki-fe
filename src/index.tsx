@@ -1,11 +1,13 @@
 import { NextUIProvider } from '@nextui-org/react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { ToastContainer } from 'react-toastify';
 
 import Router from './routers';
-import { AuthProvider } from './Providers/AuthProvider';
+import { AuthProvider } from './providers/AuthProvider';
 import reportWebVitals from './reportWebVitals';
 
+import 'react-toastify/dist/ReactToastify.css';
 import './styles/common.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
@@ -15,6 +17,18 @@ root.render(
     <NextUIProvider>
       <AuthProvider>
         <Router />
+        <ToastContainer
+          position='top-center'
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme='light'
+        />
       </AuthProvider>
     </NextUIProvider>
   </React.StrictMode>,

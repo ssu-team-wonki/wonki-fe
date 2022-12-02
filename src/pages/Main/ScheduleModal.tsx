@@ -1,14 +1,18 @@
 import { Button, Collapse, Grid, Input, Modal, Switch, Table, Text, User } from '@nextui-org/react';
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import { Edit, Calendar, Delete } from 'react-iconly';
 import { useWindowSize } from 'react-use';
 
-import { Schedule, SchedulePayload } from '../../types/Calendar';
+import { CalendarSchedule, SchedulePayload } from '../../types/Calendar';
 import { User as IUser } from '../../types/User';
+import { getDateToStdDate, getInputDateFormat } from '../../utils/date';
 
 interface ScheduleModalProps {
-  schedule?: Schedule;
+  schedule?: CalendarSchedule;
   visible: boolean;
+  onSubmit: (schedule: SchedulePayload) => void;
+  onRemove: (scheduleId: number) => void;
   onClose: () => void;
 }
 
@@ -18,7 +22,7 @@ const columns: { key: keyof IUser; label: string }[] = [
     label: '사용자',
   },
   {
-    key: 'id',
+    key: 'userId',
     label: '설정',
   },
 ];
@@ -29,11 +33,11 @@ const renderCell = (user: IUser, columnKey: keyof IUser) => {
   switch (columnKey) {
     case 'username':
       return (
-        <User squared src={user.profile_image} name={cellValue} css={{ p: 0 }}>
+        <User squared src={user.profileImage} name={cellValue} css={{ p: 0 }}>
           {user.email}
         </User>
       );
-    case 'id':
+    case 'userId':
       return (
         <>
           <Delete set='bold' />
@@ -43,23 +47,34 @@ const renderCell = (user: IUser, columnKey: keyof IUser) => {
   }
 };
 
-const ScheduleModal = ({ schedule, visible, onClose: closeHandler }: ScheduleModalProps) => {
+const initSchedulePayload: SchedulePayload = {
+  title: '',
+  contents: '',
+  isAllDay: 'N',
+  startDt: '',
+  endDt: '',
+  users: [],
+};
+
+const ScheduleModal = ({
+  schedule,
+  visible,
+  onRemove,
+  onSubmit,
+  onClose: closeHandler,
+}: ScheduleModalProps) => {
   const { width } = useWindowSize();
   const isMobile = width < 650;
+  const isEditMode = !!schedule;
 
-  const [schedulePayload, setSchedulePayload] = useState<Partial<SchedulePayload>>(
-    schedule
-      ? schedule['raw']
-      : {
-          title: '',
-          contents: '',
-          start_at: '',
-          end_at: '',
-          users: [],
-        },
+  const [schedulePayload, setSchedulePayload] = useState<SchedulePayload>(
+    isEditMode ? schedule.raw : initSchedulePayload,
   );
 
-  const [allday, setAllday] = useState(false);
+  // const isAllday =
+  //   dayjs(schedulePayload.startDt).format('HH:mm:ss') === '00:00:00' &&
+  //   dayjs(schedulePayload.endDt).format('HH:mm:ss') === '23:59:59';
+  const [allday, setAllday] = useState(schedulePayload.isAllDay === 'Y');
 
   return (
     <Modal
@@ -67,14 +82,12 @@ const ScheduleModal = ({ schedule, visible, onClose: closeHandler }: ScheduleMod
       fullScreen={isMobile}
       autoMargin
       width={'70%'}
-      aria-labelledby='schedule-modal-title'
+      aria-labelledby='schedule-modal'
       open={visible}
       onClose={closeHandler}
     >
       <Modal.Header>
-        <Text id='modal-title' size={18}>
-          스케쥴 수정
-        </Text>
+        <Text size={18}>{isEditMode ? '스케쥴 수정' : '스케쥴 등록'}</Text>
       </Modal.Header>
       <Modal.Body>
         <Input
@@ -82,17 +95,39 @@ const ScheduleModal = ({ schedule, visible, onClose: closeHandler }: ScheduleMod
           bordered
           fullWidth
           color='primary'
-          placeholder='스케쥴 설명'
+          placeholder='스케쥴 제목'
+          initialValue={schedulePayload.title}
+          onChange={({ currentTarget }) =>
+            setSchedulePayload({ ...schedulePayload, title: currentTarget.value })
+          }
           contentLeft={<Edit />}
         />
-        <Input.Textarea bordered fullWidth color='primary' placeholder='스케쥴 내용' />
+        <Input.Textarea
+          bordered
+          fullWidth
+          color='primary'
+          placeholder='스케쥴 내용'
+          initialValue={schedulePayload.contents}
+          onChange={({ currentTarget }) =>
+            setSchedulePayload({ ...schedulePayload, contents: currentTarget.value })
+          }
+        />
 
         <Grid.Container>
           <Grid xs={3}>
             <Text>하루 종일</Text>
           </Grid>
           <Grid xs={9}>
-            <Switch checked={allday} onChange={() => setAllday(prev => !prev)} />
+            <Switch
+              checked={allday}
+              onChange={() => {
+                setSchedulePayload(prev => ({
+                  ...prev,
+                  isAllDay: prev.isAllDay === 'Y' ? 'N' : 'Y',
+                }));
+                setAllday(prev => !prev);
+              }}
+            />
           </Grid>
         </Grid.Container>
 
@@ -108,6 +143,15 @@ const ScheduleModal = ({ schedule, visible, onClose: closeHandler }: ScheduleMod
               color='primary'
               placeholder='스케쥴 시작 시간'
               contentLeft={<Calendar set='bold' />}
+              value={getInputDateFormat(allday, schedulePayload.startDt)}
+              onChange={({ currentTarget }) =>
+                setSchedulePayload(prev => ({
+                  ...prev,
+                  startDt: allday
+                    ? getDateToStdDate(dayjs(currentTarget.value).format('YYYY-MM-DD 00:00:00'))
+                    : getDateToStdDate(currentTarget.value),
+                }))
+              }
             />
           </Grid>
         </Grid.Container>
@@ -122,8 +166,18 @@ const ScheduleModal = ({ schedule, visible, onClose: closeHandler }: ScheduleMod
               bordered
               fullWidth
               color='primary'
-              placeholder='스케쥴 시작 시간'
+              placeholder='스케쥴 종료 시간'
               contentLeft={<Calendar set='bold' />}
+              min={getInputDateFormat(allday, schedulePayload.startDt)}
+              value={getInputDateFormat(allday, schedulePayload.endDt)}
+              onChange={({ currentTarget }) =>
+                setSchedulePayload(prev => ({
+                  ...prev,
+                  endDt: allday
+                    ? getDateToStdDate(dayjs(currentTarget.value).format('YYYY-MM-DD 23:59:59'))
+                    : getDateToStdDate(currentTarget.value),
+                }))
+              }
             />
           </Grid>
         </Grid.Container>
@@ -136,11 +190,10 @@ const ScheduleModal = ({ schedule, visible, onClose: closeHandler }: ScheduleMod
             <Collapse
               css={{ w: '100%' }}
               bordered
-              title=''
-              subtitle='(n)명의 사용자가 초대되었습니다.'
+              title=' '
+              subtitle='0명의 사용자가 초대되었습니다.'
             >
               <Table
-                aria-label='Example table with dynamic content'
                 css={{
                   height: 'auto',
                   minWidth: '100%',
@@ -164,11 +217,30 @@ const ScheduleModal = ({ schedule, visible, onClose: closeHandler }: ScheduleMod
         </Grid.Container>
       </Modal.Body>
       <Modal.Footer>
-        <Button auto flat color='error' onClick={closeHandler}>
+        <Button auto flat color='default' onClick={closeHandler}>
           취소
         </Button>
-        <Button auto onClick={closeHandler}>
-          수정
+        {isEditMode && (
+          <Button
+            auto
+            flat
+            color='error'
+            onClick={() => {
+              onRemove(schedule.id);
+              closeHandler();
+            }}
+          >
+            삭제
+          </Button>
+        )}
+        <Button
+          auto
+          onClick={() => {
+            onSubmit(schedulePayload);
+            closeHandler();
+          }}
+        >
+          {isEditMode ? '수정' : '등록'}
         </Button>
       </Modal.Footer>
     </Modal>

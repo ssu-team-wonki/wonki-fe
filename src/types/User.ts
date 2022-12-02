@@ -1,10 +1,19 @@
 export interface User {
-  id: number;
+  userId: number;
   username: string;
-  profile_image: string;
-  birth_dt: string;
+  profileImage: string;
+  birthDt: string;
   number: string;
   email: string;
-  created_at: string;
-  updated_at: string;
+}
+
+export interface UserDetail {
+  id: number;
+  email: string;
+  createdAt: string;
+  enabled: boolean;
+  username: string;
+  accountNonExpired: boolean;
+  accountNonLocked: boolean;
+  credentialsNonExpired: boolean;
 }

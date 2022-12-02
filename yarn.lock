@@ -5921,6 +5921,11 @@ immer@^9.0.15, immer@^9.0.7:
   resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.16.tgz#8e7caab80118c2b54b37ad43e05758cdefad0198"
   integrity sha512-qenGE7CstVm1NrHQbMh8YaSzTZTFNP3zPqr3YU0S0UY441j4bJTg4A2Hh5KAhwgaiU6ZZ1Ar6y/2f4TblnMReQ==
 
+immutability-helper@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-3.1.1.tgz#2b86b2286ed3b1241c9e23b7b21e0444f52f77b7"
+  integrity sha512-Q0QaXjPjwIju/28TsugCHNEASwoCcJSyJV3uO1sOIQGI0jKgm9f41Lvz0DZj3n46cNCyAZTsEYoY4C2bVRUzyQ==
+
 import-fresh@^3.0.0, import-fresh@^3.1.0, import-fresh@^3.2.1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.3.0.tgz#37162c25fcb9ebaa2e6e53d5b4d88ce17d9e0c2b"
@@ -8641,6 +8646,13 @@ react-swipeable@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/react-swipeable/-/react-swipeable-7.0.0.tgz#7a12570ee435d35ac700511de338384aa78d12cd"
   integrity sha512-NI7KGfQ6gwNFN0Hor3vytYW3iRfMMaivGEuxcADOOfBCx/kqwXE8IfHFxEcxSUkxCYf38COLKYd9EMYZghqaUA==
+
+react-toastify@^9.1.1:
+  version "9.1.1"
+  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-9.1.1.tgz#9280caea4a13dc1739c350d90660a630807bf10b"
+  integrity sha512-pkFCla1z3ve045qvjEmn2xOJOy4ZciwRXm1oMPULVkELi5aJdHCN/FHnuqXq8IwGDLB7PPk2/J6uP9D8ejuiRw==
+  dependencies:
+    clsx "^1.1.1"
 
 react-universal-interface@^0.6.2:
   version "0.6.2"
